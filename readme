@@ -1,0 +1,2 @@
+note to self, compile with 
+g++ -o hello hello.cpp
