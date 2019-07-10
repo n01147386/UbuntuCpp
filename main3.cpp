@@ -2,38 +2,54 @@
 #include <string>
 #include <iostream>
 
+//namespaces
+using namespace std;
+using namespace sf;
 
+//function prototypes
+void WriteLine(string);
+
+//entry point
 int main()
 {
     
     int WIDTH = 400;
     int HEIGHT = 400;
-    std::string WINDOW_TITLE = "SFML WORKS-EDIT!";
+    string WINDOW_TITLE = "WINDOW TITLE";
 
 
 
-    sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), WINDOW_TITLE);
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
+    RenderWindow window(VideoMode(WIDTH, HEIGHT), WINDOW_TITLE);
+   
+    WriteLine("Hello World");    
+
+    RectangleShape mainRect(Vector2f(window.getSize().x, window.getSize().y));
+    mainRect.setFillColor(Color::Green);
 
     while (window.isOpen())
     {
-        sf::Event event;
+        Event event;
         while (window.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed)
+            if (event.type == Event::Closed)
                 window.close();
-	    if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape))
+	    if ((event.type == Event::KeyPressed) && (event.key.code == Keyboard::Escape))
         	window.close();
 
 
         }
 
         window.clear();
-        window.draw(shape);
+        window.draw(mainRect);
         window.display();
     }
 
     return 0;
+}
+
+void WriteLine(string line){
+    cout << line << endl;
+    	
+
 }
 
