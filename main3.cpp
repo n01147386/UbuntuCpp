@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <iostream>
+#include <time.h>
 
 //namespaces
 using namespace std;
@@ -10,6 +11,23 @@ using namespace sf;
 void WriteLine(string); //console printout
 
 RectangleShape CreateControl(Vector2f,Vector2f, Color, Color);
+
+
+
+
+// Get current date/time, format is YYYY-MM-DD.HH:mm:ss
+const std::string currentDateTime() {
+    time_t     now = time(0);
+    struct tm  tstruct;
+    char       buf[80];
+    tstruct = *localtime(&now);
+    strftime(buf, sizeof(buf), "%Y-%m-%d.%X", &tstruct);
+
+    return buf;
+}
+
+
+
 
 //entry point
 int main()
@@ -71,6 +89,11 @@ Color::White, Color::Black);
                     }
 		}
               
+	    }
+
+	    if ((event.type == Event::KeyPressed) && (event.key.code == Keyboard::F12)){
+    		sf::Image screenshot = window.capture(); 		 
+		screenshot.saveToFile("screenshots/" + currentDateTime() + ".png");
 	    } 
 
 
