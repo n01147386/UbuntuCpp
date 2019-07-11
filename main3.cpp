@@ -7,7 +7,9 @@ using namespace std;
 using namespace sf;
 
 //function prototypes
-void WriteLine(string);
+void WriteLine(string); //console printout
+
+RectangleShape CreateControl(Vector2f,Vector2f, Color, Color);
 
 //entry point
 int main()
@@ -23,8 +25,11 @@ int main()
    
     WriteLine("Hello World");    
 
-    RectangleShape mainRect(Vector2f(window.getSize().x, window.getSize().y));
-    mainRect.setFillColor(Color::Green);
+    RectangleShape mainRect = CreateControl(Vector2f(0,0), Vector2f(window.getSize().x, window.getSize().y),
+Color::White,Color::White);
+
+    RectangleShape subRect = CreateControl(Vector2f(50,50), Vector2f(100,25), 
+Color::White, Color::Black);
 
     while (window.isOpen())
     {
@@ -41,6 +46,7 @@ int main()
 
         window.clear();
         window.draw(mainRect);
+	window.draw(subRect);
         window.display();
     }
 
@@ -49,7 +55,16 @@ int main()
 
 void WriteLine(string line){
     cout << line << endl;
-    	
-
 }
 
+RectangleShape CreateControl(Vector2f v2f_loc, Vector2f v2f_size, Color bgColor, Color outlineColor){
+    
+	RectangleShape rect;
+	rect.setSize(v2f_size);
+	rect.setPosition(v2f_loc);
+	rect.setFillColor(bgColor);
+	rect.setOutlineColor(outlineColor);
+	rect.setOutlineThickness(1.f);
+	
+	return rect;
+}
