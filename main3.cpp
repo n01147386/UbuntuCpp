@@ -15,24 +15,48 @@ RectangleShape CreateControl(Vector2f,Vector2f, Color, Color);
 int main()
 {
     
-    int WIDTH = 400;
-    int HEIGHT = 400;
-    string WINDOW_TITLE = "WINDOW TITLE";
-
-
+    //Window properties
+    int WIDTH = 800;
+    int HEIGHT = 800;
+    string WINDOW_TITLE = "My Title";
+    Color COLOR_BACKGROUND = Color::White;
+    Color COLOR_BORDER = Color::White;
+    
+    //Font properties
+    string FONT_FILE = "FreeMono.ttf";
+    int FONT_SIZE = 14;
+    int FONT_MARGIN_X = 20;
+    int FONT_MARGIN_Y = 2;
+    Color FONT_COLOR = Color::Black;
 
     RenderWindow window(VideoMode(WIDTH, HEIGHT), WINDOW_TITLE);
    
-    WriteLine("Hello World");    
-
     RectangleShape mainRect = CreateControl(Vector2f(0,0), Vector2f(window.getSize().x, window.getSize().y),
-Color::White,Color::White);
+COLOR_BACKGROUND,COLOR_BORDER);
 
     RectangleShape subRect = CreateControl(Vector2f(50,50), Vector2f(100,25), 
 Color::White, Color::Black);
+    
+    Font font;
+    
+    if (!font.loadFromFile(FONT_FILE)){ 
+	//error
+	cout << "Couldn't load font!" << endl;
+	return 250;
+    }
 
+    Text text;
+    text.setFont(font);
+    text.setString("button1");
+    text.setCharacterSize(FONT_SIZE); //in pixels
+    text.setColor(FONT_COLOR);
+    text.setPosition(subRect.getPosition().x + FONT_MARGIN_X,subRect.getPosition().y + FONT_MARGIN_Y);
+
+
+    //application loop
     while (window.isOpen())
     {
+
         Event event;
         while (window.pollEvent(event))
         {
@@ -40,6 +64,15 @@ Color::White, Color::Black);
                 window.close();
 	    if ((event.type == Event::KeyPressed) && (event.key.code == Keyboard::Escape))
         	window.close();
+	    if (event.type == Event::MouseButtonPressed){
+	    	if (event.mouseButton.button == sf::Mouse::Left){
+		    if (subRect.getGlobalBounds().contains(window.mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y)))) {
+                        std::cout << "Button pressed" << std::endl;
+                    }
+		}
+              
+	    } 
+
 
 
         }
@@ -47,6 +80,7 @@ Color::White, Color::Black);
         window.clear();
         window.draw(mainRect);
 	window.draw(subRect);
+	window.draw(text);
         window.display();
     }
 
@@ -68,3 +102,6 @@ RectangleShape CreateControl(Vector2f v2f_loc, Vector2f v2f_size, Color bgColor,
 	
 	return rect;
 }
+
+
+
