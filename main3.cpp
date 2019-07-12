@@ -12,6 +12,7 @@ void WriteLine(string); //console printout
 
 RectangleShape CreateControl(Vector2f,Vector2f, Color, Color);
 void MessageBox(string,string);
+Text CreateLabel(string);
 
 
 
@@ -36,6 +37,8 @@ const std::string currentDateTime() {
     string WINDOW_TITLE = "My Title";
     Color COLOR_BACKGROUND = Color::White;
     Color COLOR_BORDER = Color::White;
+
+    
     
     //Font properties
     string FONT_FILE = "FreeMono.ttf";
@@ -43,6 +46,7 @@ const std::string currentDateTime() {
     int FONT_MARGIN_X = 20;
     int FONT_MARGIN_Y = 2;
     Color FONT_COLOR = Color::Black;
+    
 
 
 //entry point
@@ -52,12 +56,17 @@ int main()
 
 
     RenderWindow window(VideoMode(WIDTH, HEIGHT), WINDOW_TITLE);
-   
-    RectangleShape mainRect = CreateControl(Vector2f(0,0), Vector2f(window.getSize().x, window.getSize().y),
-COLOR_BACKGROUND,COLOR_BORDER);
 
-    RectangleShape subRect = CreateControl(Vector2f(50,50), Vector2f(100,25), 
-Color::White, Color::Black);
+    Vector2i SCREEN_CENTER = Vector2i((sf::VideoMode::getDesktopMode().width / 2.0f) - (WIDTH / 2), (sf::VideoMode::getDesktopMode().height / 2.0f) - (HEIGHT / 2));
+
+    window.setPosition(SCREEN_CENTER);
+   
+    RectangleShape mainRect = CreateControl(Vector2f(0,0), Vector2f(window.getSize().x, window.getSize().y), COLOR_BACKGROUND,COLOR_BORDER);
+
+
+    // BUTTON START
+
+    RectangleShape button = CreateControl(Vector2f(50,50), Vector2f(100,25), Color::White, Color::Black);
     
     Font font;
     
@@ -67,12 +76,25 @@ Color::White, Color::Black);
 	return 250;
     }
 
-    Text text;
-    text.setFont(font);
-    text.setString("button1");
-    text.setCharacterSize(FONT_SIZE); //in pixels
-    text.setColor(FONT_COLOR);
-    text.setPosition(subRect.getPosition().x + FONT_MARGIN_X,subRect.getPosition().y + FONT_MARGIN_Y);
+    Text button_text;
+    button_text.setFont(font);
+    button_text.setString("button1");
+    button_text.setCharacterSize(FONT_SIZE); //in pixels
+    button_text.setColor(FONT_COLOR);
+    button_text.setPosition(button.getPosition().x + FONT_MARGIN_X,button.getPosition().y + FONT_MARGIN_Y);
+
+    // BUTTON END
+
+    // LABEL START
+    Text label = CreateLabel("label1");
+    label.setFont(font);
+
+    // LABEL END
+
+
+
+
+
 
     //application loop
     while (window.isOpen())
@@ -87,7 +109,7 @@ Color::White, Color::Black);
         	window.close();
 	    if (event.type == Event::MouseButtonPressed){
 	    	if (event.mouseButton.button == sf::Mouse::Left){
-		    if (subRect.getGlobalBounds().contains(window.mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y)))) {
+		    if (button.getGlobalBounds().contains(window.mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y)))) {
 			MessageBox("Message Box","button pressed");
 			
                     }
@@ -104,11 +126,13 @@ Color::White, Color::Black);
 
         }
 
+
 				
         window.clear();
         window.draw(mainRect);
-	window.draw(subRect);
-	window.draw(text);
+	window.draw(button);
+	window.draw(button_text);
+	window.draw(label); 
         window.display();
     }
 
@@ -133,7 +157,11 @@ RectangleShape CreateControl(Vector2f v2f_loc, Vector2f v2f_size, Color bgColor,
 
 void MessageBox(string title, string message)
 {
-    sf::RenderWindow w2(sf::VideoMode(200, 75), title);
+    
+    int width = 200;
+    int height = 76;
+
+    sf::RenderWindow w2(sf::VideoMode(width, height), title);
 
     Font font;
     
@@ -142,8 +170,6 @@ void MessageBox(string title, string message)
 	cout << "Couldn't load font!" << endl;
     }
 
-    WriteLine(message);
-
     Text text;
     text.setFont(font);
     text.setString(message);
@@ -151,10 +177,9 @@ void MessageBox(string title, string message)
     text.setColor(FONT_COLOR);
     text.setPosition(15,15);
 
-    w2.setPosition(Vector2i(sf::VideoMode::getDesktopMode().width / 2.0f, sf::VideoMode::getDesktopMode().height / 2.0f));
+    Vector2i SCREEN_CENTER = Vector2i((sf::VideoMode::getDesktopMode().width / 2.0f) - (width / 2), (sf::VideoMode::getDesktopMode().height / 2.0f) - (height / 2));
 
-
-
+    w2.setPosition(SCREEN_CENTER);
 
     while (w2.isOpen())
     {
@@ -165,12 +190,27 @@ void MessageBox(string title, string message)
                 w2.close();
         }
 
-
         w2.clear(sf::Color::White);
 	w2.draw(text);
         w2.display();
     }
 }
+
+Text CreateLabel(string labelText){
+
+    Text text;
+    text.setString(labelText);
+    text.setCharacterSize(FONT_SIZE); //in pixels
+    text.setColor(FONT_COLOR);
+    text.setPosition(170,50);
+    
+
+    return text;
+
+
+}
+
+
 
 
 
