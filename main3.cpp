@@ -11,7 +11,7 @@ using namespace sf;
 void WriteLine(string); //console printout
 
 RectangleShape CreateControl(Vector2f,Vector2f, Color, Color);
-
+void MessageBox(string,string);
 
 
 
@@ -28,11 +28,8 @@ const std::string currentDateTime() {
 
 
 
+// GLOBALS
 
-//entry point
-int main()
-{
-    
     //Window properties
     int WIDTH = 800;
     int HEIGHT = 800;
@@ -46,6 +43,13 @@ int main()
     int FONT_MARGIN_X = 20;
     int FONT_MARGIN_Y = 2;
     Color FONT_COLOR = Color::Black;
+
+
+//entry point
+int main()
+{
+    
+
 
     RenderWindow window(VideoMode(WIDTH, HEIGHT), WINDOW_TITLE);
    
@@ -70,7 +74,6 @@ Color::White, Color::Black);
     text.setColor(FONT_COLOR);
     text.setPosition(subRect.getPosition().x + FONT_MARGIN_X,subRect.getPosition().y + FONT_MARGIN_Y);
 
-
     //application loop
     while (window.isOpen())
     {
@@ -85,7 +88,8 @@ Color::White, Color::Black);
 	    if (event.type == Event::MouseButtonPressed){
 	    	if (event.mouseButton.button == sf::Mouse::Left){
 		    if (subRect.getGlobalBounds().contains(window.mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y)))) {
-                        std::cout << "Button pressed" << std::endl;
+			MessageBox("Message Box","button pressed");
+			
                     }
 		}
               
@@ -100,6 +104,7 @@ Color::White, Color::Black);
 
         }
 
+				
         window.clear();
         window.draw(mainRect);
 	window.draw(subRect);
@@ -124,6 +129,47 @@ RectangleShape CreateControl(Vector2f v2f_loc, Vector2f v2f_size, Color bgColor,
 	rect.setOutlineThickness(1.f);
 	
 	return rect;
+}
+
+void MessageBox(string title, string message)
+{
+    sf::RenderWindow w2(sf::VideoMode(200, 75), title);
+
+    Font font;
+    
+    if (!font.loadFromFile(FONT_FILE)){ 
+	//error
+	cout << "Couldn't load font!" << endl;
+    }
+
+    WriteLine(message);
+
+    Text text;
+    text.setFont(font);
+    text.setString(message);
+    text.setCharacterSize(FONT_SIZE); //in pixels
+    text.setColor(FONT_COLOR);
+    text.setPosition(15,15);
+
+    w2.setPosition(Vector2i(sf::VideoMode::getDesktopMode().width / 2.0f, sf::VideoMode::getDesktopMode().height / 2.0f));
+
+
+
+
+    while (w2.isOpen())
+    {
+        sf::Event event;
+        while (w2.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                w2.close();
+        }
+
+
+        w2.clear(sf::Color::White);
+	w2.draw(text);
+        w2.display();
+    }
 }
 
 
